@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一桿「稱仔」－文字冒險 RPG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Scene Background -->
+        <img id="scene-image" src="" alt="Scene Background">
+        <div id="scene-overlay"></div> <!-- Dark gradient for text readability -->
+
+        <!-- Top HUD: Stats -->
+        <div id="hud" class="hidden">
+            <div class="stat-box">
+                <span class="stat-label">💯 分數</span>
+                <span id="stat-money" class="stat-value">0</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">❤️ 體力</span>
+                <div class="stat-bar-container"><div id="bar-stamina" class="stat-bar fill-red"></div></div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">✨ 尊嚴</span>
+                <div class="stat-bar-container"><div id="bar-dignity" class="stat-bar fill-gold"></div></div>
+            </div>
+        </div>
+
+        <!-- Notification Banner (For stat changes or events) -->
+        <div id="notification-banner" class="hidden">數值改變</div>
+
+        <!-- Character Layer (Street Fighter Style) -->
+        <div id="character-layer">
+            <img id="player-sprite" src="images/qin_decan_sprite.png" alt="Protagonist">
+            <img id="enemy-sprite" src="images/police_sprite.png" alt="Enemy" style="opacity: 0; transition: opacity 0.5s;">
+        </div>
+
+        <!-- Damage Floating Text Layer -->
+        <div id="damage-text-layer"></div>
+
+        <!-- Choice Panel -->
+        <div id="choice-panel" class="hidden">
+            <!-- Choices injected via JS -->
+        </div>
+
+        <!-- Dialogue Box at the bottom -->
+        <div id="dialogue-box">
+            <div id="speaker-name">秦得參</div>
+            <div id="dialogue-text">正在載入劇情...</div>
+            <div id="next-indicator">▼</div>
+        </div>
+        
+        <!-- Start Screen Overlay -->
+        <div id="start-screen">
+            <h1>一桿「稱仔」</h1>
+            <h2>日治台灣生存 RPG</h2>
+            <p>你將扮演佃農「秦得參」，在殘酷的體制下掙扎求生。<br>你的每一個選擇，都將決定你的尊嚴與命運。</p>
+            <div class="input-group">
+                <input type="text" id="class-input" placeholder="請輸入班級 (例：高一忠)" required>
+                <input type="text" id="student-id-input" placeholder="請輸入學號或姓名" required>
+            </div>
+            <button id="start-btn">開始命運的輪迴</button>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="hidden">
+            <h1 id="end-title">結局</h1>
+            <p id="end-desc">描述</p>
+            <button id="restart-btn">重新開始</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+:root {
+    --bg-color: #000;
+    --text-color: #eee;
+    --accent-color: #8b2626; /* Deep red for danger/tragedy */
+    --gold: #b38b4d;
+    --ui-bg: rgba(20, 20, 20, 0.85);
+    --border-color: #c4b59d;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Serif TC', serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    overflow: hidden;
+    user-select: none;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Background Scene */
+#scene-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+#scene-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.8) 100%);
+    z-index: 2;
+}
+
+/* HUD */
+#hud {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.stat-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.stat-label {
+    font-weight: bold;
+    color: var(--gold);
+    text-shadow: 1px 1px 2px #000;
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.stat-bar-container {
+    flex-grow: 1;
+    height: 12px;
+    background: #333;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #000;
+}
+
+.stat-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.fill-red { background: #d94545; }
+.fill-gold { background: var(--gold); }
+
+/* Notification Banner */
+#notification-banner {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    background: rgba(139, 38, 38, 0.9);
+    padding: 10px 30px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { top: 60px; opacity: 0; }
+    to { top: 80px; opacity: 1; }
+}
+
+/* Dialogue Box */
+#dialogue-box {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1000px;
+    background: var(--ui-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 30px 40px;
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    cursor: pointer;
+}
+
+#speaker-name {
+    position: absolute;
+    top: -20px;
+    left: 20px;
+    background: var(--border-color);
+    color: #000;
+    padding: 5px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 4px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+#dialogue-text {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    text-shadow: 1px 1px 2px #000;
+    min-height: 80px; /* Space for 2 lines */
+}
+
+#next-indicator {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    font-size: 1.2rem;
+    color: var(--gold);
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(5px); }
+}
+
+/* Choice Panel */
+#choice-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 80%;
+    max-width: 600px;
+}
+
+.choice-btn {
+    background: rgba(30, 30, 30, 0.95);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+    padding: 15px 30px;
+    font-size: 1.3rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.choice-btn:hover {
+    background: var(--border-color);
+    color: #000;
+    transform: scale(1.02);
+}
+
+/* Screens (Start / End) */
+#start-screen, #game-over-screen {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+}
+
+#start-screen h1, #game-over-screen h1 {
+    font-size: 4rem;
+    color: var(--gold);
+    margin-bottom: 10px;
+}
+
+#start-screen h2 {
+    font-size: 2rem;
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+#start-screen p, #game-over-screen p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #ddd;
+    margin-bottom: 40px;
+    max-width: 600px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto 30px auto;
+}
+
+.input-group input {
+    background: rgba(30, 30, 30, 0.8);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    text-align: center;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 10px rgba(179, 139, 77, 0.4);
+    background: rgba(40, 40, 40, 0.9);
+}
+
+#start-btn, #restart-btn {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#start-btn:hover, #restart-btn:hover {
+    background: #a83232;
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+/* Special Effects */
+.shake {
+    animation: screenShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes screenShake {
+    10%, 90% { transform: translate3d(-5px, 0, 0); }
+    20%, 80% { transform: translate3d(5px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-10px, 0, 0); }
+    40%, 60% { transform: translate3d(10px, 0, 0); }
+}
+
+.fade-black {
+    background-color: black !important;
+    transition: background-color 1s ease;
+}
+
+/* Character Layer (Street Fighter Style) */
+#character-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 5%;
+}
+
+#player-sprite, #enemy-sprite {
+    max-height: 70vh;
+    filter: contrast(1.1);
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+/* Specific positioning / scaling */
+#player-sprite { transform-origin: bottom center; }
+#enemy-sprite { transform-origin: bottom center; }
+
+/* Battle Animations */
+.anim-attack-lunge {
+    animation: lungeLeft 0.3s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes lungeLeft {
+    0% { transform: translateX(0) scale(1); }
+    50% { transform: translateX(-150px) scale(1.1); }
+    100% { transform: translateX(0) scale(1); }
+}
+
+.anim-damage-hit {
+    animation: hitShake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    filter: contrast(1.2) sepia(0.3) drop-shadow(0 0 20px red) !important;
+}
+
+@keyframes hitShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-15px); }
+    40%, 80% { transform: translateX(15px); }
+}
+
+/* Floating Damage Text */
+#damage-text-layer {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 15;
+}
+
+.damage-float-text {
+    position: absolute;
+    left: 20%; /* Above player head */
+    bottom: 60%;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ff3333;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 4px 15px red;
+    animation: floatUpFade 1.5s ease-out forwards;
+}
+
+@keyframes floatUpFade {
+    0% { transform: translateY(0) scale(0.5); opacity: 0; }
+    20% { transform: translateY(-50px) scale(1.2); opacity: 1; }
+    100% { transform: translateY(-150px) scale(1); opacity: 0; }
+}
